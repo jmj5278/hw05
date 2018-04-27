@@ -1,0 +1,123 @@
+---
+title: "hw05-Minjeong-Jeong"
+author: "Minjeong Jeong"
+date: "2018/ 4/25"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,error = TRUE,fig.path = 'image/')
+```
+```{r}
+library(dieroller)
+```
+
+
+#1) Object "die"
+```{r}
+fair_die <- die()
+fair_die
+# die with non-standard sides
+weird_die <- die(sides = c('i', 'ii', 'iii', 'iv', 'v', 'vi'))
+weird_die
+# create a loaded die
+loaded_die <- die(prob = c(0.075, 0.1, 0.125, 0.15, 0.20, 0.35))
+loaded_die
+# bad sides
+bad_die <- die(sides = c('a', 'b', 'c', 'd', 'e'))
+```
+#2) Object "roll"
+```{r}
+# roll fair die 50 times
+fair_die <- die()
+# roll 50 times
+set.seed(123)
+fair_50rolls <- roll(fair_die, times = 50)
+# print
+fair_50rolls
+# what's in fair50?
+names(fair_50rolls)
+fair_50rolls$rolls
+fair_50rolls$sides
+fair_50rolls$prob
+fair_50rolls$total
+```
+
+#3) Summary method for "roll" objects
+```{r}
+set.seed(123)
+fair_50rolls <- roll(fair_die, times = 50)
+fair50_sum <- summary(fair_50rolls)
+fair50_sum
+# what's in the summary
+class(fair50_sum)
+names(fair50_sum)
+fair50_sum$freqs
+```
+
+#4) Plot methd for "roll" objects
+```{r}
+# plot method
+plot(fair_50rolls)
+```
+
+#5) Additional Methods
+```{r}
+# roll fair die
+set.seed(123)
+fair_die <- die()
+fair500 <- roll(fair_die, times = 500)
+# summary method
+summary(fair500)
+# extracting roll in position 500
+fair500[500]
+# replacing last roll
+fair500[500] <- 1
+fair500[500]
+summary(fair500)
+# adding 100 rolls
+fair600 <- fair500 + 100
+summary(fair600)
+# plot method
+plot(fair500)
+```
+
+#De Mere's problem
+##Problem 1
+The first part of the problem involves computing the probability of getting at least one "6" in four rolls of die.
+```{r}
+library(dieroller)
+
+set.seed(123)
+series <- 0
+for (i in 1:1000) {
+  if(sum((roll(die(), times = 4)$rolls) == 6) != 0) {
+    series  <- 1+series 
+  }
+}
+series /1000
+
+1-(5/6)^4
+```
+
+##Problem 2
+The other problem involves computing the probability of getting at least two
+“6” in 24 rolls of a pair of dice. This probability can be computed analytically as:
+```{r}
+set.seed(123)
+
+series2 <- 0
+for (i in 1:1000) {
+  for (i in 1:24) {
+    if((sum(roll(die(), times = 2)$rolls) == 12)) {
+      series2 <- series2 + 1
+      break
+    }
+  }
+}
+
+series2/1000
+
+1-(35/36)^24
+```
+
